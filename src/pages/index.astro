@@ -1,0 +1,192 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout>
+  <!-- Welcome Banner -->
+  <section class="bg-blue-600 text-white rounded-lg shadow-lg p-8 mb-12">
+    <div class="container mx-auto">
+      <h1 class="text-4xl md:text-5xl font-bold mb-4">Welcome to My Personal Blog</h1>
+      <p class="text-lg md:text-xl opacity-90 mb-6 max-w-3xl">
+        Share technical insights, life reflections, and learning experiences, documenting every step of growth.
+      </p>
+      <div class="flex flex-wrap gap-4">
+        <a href="/create-post" class="bg-white text-blue-600 px-6 py-3 rounded-md font-medium hover:bg-gray-100 transition-colors">
+          Write a Post
+        </a>
+        <a href="#about" class="bg-transparent border-2 border-white text-white px-6 py-3 rounded-md font-medium hover:bg-white hover:text-blue-600 transition-colors">
+          Learn More
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Recent Posts -->
+  <div class="mb-12">
+    <h2 class="text-3xl font-bold text-gray-800 mb-4">Recent Posts</h2>
+    <div id="posts-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <!-- Loading state -->
+      <div class="col-span-full text-center py-12">
+        <div class="animate-spin rounded-full h-12 w-12 border-t-4 border-blue-600 border-solid mx-auto mb-4"></div>
+        <p class="text-gray-600">Loading posts...</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- About the Blog -->
+  <section id="about" class="bg-white rounded-lg shadow-md p-8 mb-12">
+    <h2 class="text-3xl font-bold text-gray-800 mb-6 text-center">About This Blog</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+      <div>
+        <p class="text-gray-700 mb-4 leading-relaxed">
+          This is a personal blog website built with the Astro framework, aiming to share technical knowledge, learning experiences, and life reflections.
+        </p>
+        <p class="text-gray-700 mb-4 leading-relaxed">
+          The blog supports publishing, editing, and managing articles, with a modern design style that ensures a good reading experience on various devices.
+        </p>
+        <p class="text-gray-700 leading-relaxed">
+          Thank you for visiting, and I hope you can find valuable content here!
+        </p>
+      </div>
+      <div class="bg-white rounded-lg shadow-md p-6">
+        <h3 class="text-xl font-semibold text-gray-800 mb-4">Blog Features</h3>
+        <ul class="space-y-3">
+          <li class="flex items-start">
+            <span class="text-blue-600 mr-3 mt-1">✓</span>
+            <span class="text-gray-700">Modern Astro Framework</span>
+          </li>
+          <li class="flex items-start">
+            <span class="text-blue-600 mr-3 mt-1">✓</span>
+            <span class="text-gray-700">Responsive design, adaptable to various devices</span>
+          </li>
+          <li class="flex items-start">
+            <span class="text-blue-600 mr-3 mt-1">✓</span>
+            <span class="text-gray-700">Clean and elegant UI design</span>
+          </li>
+          <li class="flex items-start">
+            <span class="text-blue-600 mr-3 mt-1">✓</span>
+            <span class="text-gray-700">Support for article management functions</span>
+          </li>
+          <li class="flex items-start">
+            <span class="text-blue-600 mr-3 mt-1">✓</span>
+            <span class="text-gray-700">Fast loading speed</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Blog Statistics -->
+  <section class="bg-white rounded-lg shadow-md p-8">
+    <h2 class="text-3xl font-bold text-gray-800 mb-6 text-center">Blog Statistics</h2>
+    <div class="grid grid-cols-3 gap-8 text-center">
+      <div class="bg-white rounded-lg p-6 border border-gray-200">
+        <div id="posts-count" class="text-4xl font-bold text-blue-600 mb-2">0</div>
+        <div class="text-gray-600">Posts Count</div>
+      </div>
+      <div class="bg-white rounded-lg p-6 border border-gray-200">
+        <div class="text-4xl font-bold text-purple-600 mb-2">5</div>
+        <div class="text-gray-600">Categories</div>
+      </div>
+      <div class="bg-white rounded-lg p-6 border border-gray-200">
+        <div id="comments-count" class="text-4xl font-bold text-green-600 mb-2">0</div>
+        <div class="text-gray-600">Comments Count</div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    // Fetch posts list when page loads
+    window.addEventListener('DOMContentLoaded', async () => {
+      const postsContainer = document.getElementById('posts-container');
+      const postsCount = document.getElementById('posts-count');
+      const commentsCount = document.getElementById('comments-count');
+      
+      try {
+        // Call get posts list API
+        const response = await fetch('http://localhost:3001/api/posts');
+        const data = await response.json();
+        
+        if (data.success) {
+          const posts = data.data;
+          
+          // Update posts count
+          postsCount.textContent = posts.length;
+          
+          // Get total comments count
+          let totalComments = 0;
+          for (const post of posts) {
+            const commentsResponse = await fetch(`http://localhost:3001/api/comments/post/${post.post_id}`);
+            const commentsData = await commentsResponse.json();
+            if (commentsData.success) {
+              totalComments += commentsData.data.length;
+            }
+          }
+          commentsCount.textContent = totalComments;
+          
+          // Render posts list
+          if (posts.length === 0) {
+            postsContainer.innerHTML = `
+              <div class="col-span-full text-center py-12">
+                <p class="text-gray-600">No posts yet, come and write your first one!</p>
+              </div>
+            `;
+          } else {
+            // Render posts list and get comment count for each post
+            const renderPosts = async () => {
+              let postsHtml = '';
+              
+              for (const post of posts) {
+                // Get comment count for current post
+                let commentCount = 0;
+                try {
+                  const commentsResponse = await fetch(`http://localhost:3001/api/comments/post/${post.post_id}`);
+                  const commentsData = await commentsResponse.json();
+                  if (commentsData.success) {
+                    commentCount = commentsData.data.length;
+                  }
+                } catch (error) {
+                  console.error(`Failed to get comment count for post ${post.post_id}:`, error);
+                }
+                
+                postsHtml += `
+                  <article class="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow">
+                    <div class="mb-4">
+                      <h3 class="text-xl font-semibold text-gray-800 mb-2">${post.title}</h3>
+                      <div class="text-sm text-gray-500 flex items-center space-x-4">
+                        <span>Author: ${post.author_name}</span>
+                        <span>Published: ${new Date(post.created_at).toLocaleString()}</span>
+                        <span>Comments: ${commentCount}</span>
+                      </div>
+                    </div>
+                    <p class="text-gray-600 mb-4 line-clamp-3">${post.content.substring(0, 150)}...</p>
+                    <a href="/posts/${post.post_id}" class="text-blue-600 hover:text-blue-800 font-medium">
+                      Read more →
+                    </a>
+                  </article>
+                `;
+              }
+              
+              postsContainer.innerHTML = postsHtml;
+            };
+            
+            renderPosts();
+          }
+        } else {
+          postsContainer.innerHTML = `
+            <div class="col-span-full text-center py-12">
+              <p class="text-red-600">Failed to load posts: ${data.message}</p>
+            </div>
+          `;
+        }
+      } catch (error) {
+        console.error('Failed to get posts list:', error);
+        postsContainer.innerHTML = `
+          <div class="col-span-full text-center py-12">
+            <p class="text-red-600">Network error, please try again later</p>
+          </div>
+        `;
+      }
+    });
+  </script>
+</Layout>
