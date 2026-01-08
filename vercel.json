@@ -2,26 +2,23 @@
   "version": 2,
   "builds": [
     {
-      "src": "server/app.js",
+      "src": "api/*.js",
       "use": "@vercel/node"
     },
     {
-      "src": "src/**/*.astro",
-      "use": "@astrojs/vercel/serverless"
+      "src": "package.json",
+      "use": "@vercel/static-build",
+      "config": { "distDir": "dist" }
     }
   ],
   "routes": [
     {
       "src": "/api/(.*)",
-      "dest": "/server/app.js"
+      "dest": "/api/$1.js"
     },
     {
       "src": "/(.*)",
-      "dest": "/src/index.html"
+      "dest": "/dist/$1"
     }
-  ],
-  "env": {
-    "NODE_ENV": "production"
-  }
+  ]
 }
-
