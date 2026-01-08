@@ -22,3 +22,11 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+# 忽略 node 缓存
+server/D/vue/node_cache/
+node_modules/
+
+# 忽略构建文件
+dist/
+*.log
