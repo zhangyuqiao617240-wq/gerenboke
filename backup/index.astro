@@ -104,7 +104,7 @@ import Layout from '../layouts/Layout.astro';
       
       try {
         // Call get posts list API
-        const response = await fetch('/api/posts');
+        const response = await fetch('http://localhost:3001/api/posts');
         const data = await response.json();
         
         if (data.success) {
@@ -116,7 +116,7 @@ import Layout from '../layouts/Layout.astro';
           // Get total comments count
           let totalComments = 0;
           for (const post of posts) {
-            const commentsResponse = await fetch(`/api/comments/post/${post.post_id}`);
+            const commentsResponse = await fetch(`http://localhost:3001/api/comments/post/${post.post_id}`);
             const commentsData = await commentsResponse.json();
             if (commentsData.success) {
               totalComments += commentsData.data.length;
@@ -140,7 +140,7 @@ import Layout from '../layouts/Layout.astro';
                 // Get comment count for current post
                 let commentCount = 0;
                 try {
-                  const commentsResponse = await fetch(`/api/comments/post/${post.post_id}`);
+                  const commentsResponse = await fetch(`http://localhost:3001/api/comments/post/${post.post_id}`);
                   const commentsData = await commentsResponse.json();
                   if (commentsData.success) {
                     commentCount = commentsData.data.length;

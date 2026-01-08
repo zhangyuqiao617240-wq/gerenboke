@@ -37,7 +37,7 @@ const { id } = Astro.params;
       
       try {
         // Call get post details API
-        const response = await fetch(`/api/posts/${id}`);
+        const response = await fetch(`http://localhost:3001/api/posts/${id}`);
         const data = await response.json();
         
         if (data.success) {
@@ -91,7 +91,7 @@ const { id } = Astro.params;
                   }
                   
                   // Call delete API
-                  const deleteResponse = await fetch(`/api/posts/${post.post_id}`, {
+                  const deleteResponse = await fetch(`http://localhost:3001/api/posts/${post.post_id}`, {
                     method: 'DELETE',
                     headers: {
                       'Authorization': `Bearer ${token}`,
@@ -125,7 +125,7 @@ const { id } = Astro.params;
           // Get and display comments list
           const loadComments = async () => {
             try {
-              const commentsResponse = await fetch(`/api/comments/post/${post.post_id}`);
+              const commentsResponse = await fetch(`http://localhost:3001/api/comments/post/${post.post_id}`);
               const commentsData = await commentsResponse.json();
               
               if (commentsData.success) {
@@ -224,7 +224,7 @@ const { id } = Astro.params;
                       }
                       
                       // Submit comment
-                      const submitResponse = await fetch('/api/comments/', {
+                      const submitResponse = await fetch('http://localhost:3001/api/comments/', {
                         method: 'POST',
                         headers: {
                           'Authorization': `Bearer ${token}`,
@@ -274,7 +274,7 @@ const { id } = Astro.params;
                       }
                       
                       // Call delete comment API
-                      const deleteResponse = await fetch(`/api/comments/${commentId}`, {
+                      const deleteResponse = await fetch(`http://localhost:3001/api/comments/${commentId}`, {
                         method: 'DELETE',
                         headers: {
                           'Authorization': `Bearer ${token}`,

@@ -1,0 +1,26 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "server/app.js",
+      "use": "@vercel/node"
+    },
+    {
+      "src": "src/**/*.astro",
+      "use": "@astrojs/vercel/serverless"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "/server/app.js"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/src/index.html"
+    }
+  ],
+  "env": {
+    "NODE_ENV": "production"
+  }
+}

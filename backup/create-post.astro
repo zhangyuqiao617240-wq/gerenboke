@@ -70,7 +70,7 @@ import Layout from '../layouts/Layout.astro';
       
       try {
         // Call create post API
-        const response = await fetch('/api/posts', {
+        const response = await fetch('http://localhost:3001/api/posts', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
