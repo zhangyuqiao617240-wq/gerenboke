@@ -1,101 +1,101 @@
-# 个人博客网站
+# Personal Blog Website
 
-一个基于Astro + Node.js + MySQL的个人博客网站，支持文章的发布、编辑、删除和浏览功能。
+A personal blog website built with Astro + Node.js + MySQL, supporting article publishing, editing, deletion, and browsing functionalities.
 
-## 技术栈
+## Tech Stack
 
-### 前端
-- Astro框架
+### Frontend
+- Astro Framework
 - HTML + CSS + JavaScript
-- 响应式设计
+- Responsive Design
 
-### 后端
+### Backend
 - Node.js + Express
-- MySQL数据库
-- JWT认证
+- MySQL Database
+- JWT Authentication
 
-## 功能特性
+## Features
 
-- ✅ 文章列表展示（仅显示数据库中存在的文章）
-- ✅ 文章详情查看
-- ✅ 文章发布功能
-- ✅ 文章编辑功能
-- ✅ 文章删除功能
-- ✅ 用户注册和登录
-- ✅ 评论功能（待完善）
+- ✅ Article list display (shows only articles existing in the database)
+- ✅ Article detail viewing
+- ✅ Article publishing functionality
+- ✅ Article editing functionality
+- ✅ Article deletion functionality
+- ✅ User registration and login
+- ✅ Comment functionality (to be improved)
 
-## 数据流程
+## Data Flow
 
-所有文章数据均从数据库动态获取，不使用本地存储：
+All article data is dynamically fetched from the database, not using local storage:
 
-1. 页面加载时，前端通过fetch API调用后端接口
-2. 后端从MySQL数据库查询文章数据
-3. 后端返回JSON格式的文章数据
-4. 前端渲染文章内容
-5. 不存在的文章ID会显示404页面
+1. When the page loads, the frontend calls backend APIs via fetch API
+2. The backend queries article data from the MySQL database
+3. The backend returns article data in JSON format
+4. The frontend renders the article content
+5. Non-existent article IDs display a 404 page
 
-## 开发说明
+## Development Instructions
 
-### 前端开发
+### Frontend Development
 
 ```bash
-# 安装依赖
+# Install dependencies
 npm install
 
-# 启动开发服务器
+# Start development server
 npm run dev
 
-# 构建生产版本
+# Build for production
 npm run build
 ```
 
-### 后端开发
+### Backend Development
 
 ```bash
-# 进入后端目录
+# Enter backend directory
 cd server
 
-# 安装依赖
+# Install dependencies
 npm install
 
-# 启动开发服务器
+# Start development server
 npm run dev
 ```
 
-## 数据库设计
+## Database Design
 
-### 表结构
+### Table Structure
 
-#### users表
-- user_id (主键)
+#### users Table
+- user_id (Primary Key)
 - username
 - email
 - password
 - created_at
 
-#### posts表
-- post_id (主键)
+#### posts Table
+- post_id (Primary Key)
 - title
 - content
-- author_id (外键，关联users表)
+- author_id (Foreign Key, references users table)
 - created_at
 - updated_at
 
-#### comments表
-- comment_id (主键)
-- post_id (外键，关联posts表)
-- author_id (外键，关联users表)
+#### comments Table
+- comment_id (Primary Key)
+- post_id (Foreign Key, references posts table)
+- author_id (Foreign Key, references users table)
 - content
 - created_at
 
-## 注意事项
+## Notes
 
-1. 网站只会显示数据库中实际存在的文章
-2. 访问不存在的文章ID会显示404页面
-3. 未登录用户无法发布、编辑或删除文章
-4. 只有文章作者才能编辑或删除自己的文章
-5. 用户认证信息使用JWT存储在localStorage中
+1. The website only displays articles that actually exist in the database
+2. Accessing non-existent article IDs will display a 404 page
+3. Non-logged-in users cannot publish, edit, or delete articles
+4. Only article authors can edit or delete their own articles
+5. User authentication information is stored in localStorage using JWT
 
-## 许可证
+## License
 
-MIT License
+MIT License.
